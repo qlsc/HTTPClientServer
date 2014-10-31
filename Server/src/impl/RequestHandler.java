@@ -9,7 +9,6 @@ public class RequestHandler {
 	public byte[] processRequest(byte[] bytes) {
 		if(null==bytes) return "noDate".getBytes();
 		String request = new String(bytes); 
-//		StringBuffer response = new StringBuffer();
 		StringBuffer response = new StringBuffer();
 		//记录日志  
         System.out.println(request); 
@@ -28,7 +27,7 @@ public class RequestHandler {
                     response.append("Date: "+now+"\r\n");  
                     response.append("Server: HTTP 1.0\r\n");  
 //                    response.append("Content-length: "+theData.length+"\r\n");  
-//                    response.append("Content-Type: "+contentType+"\r\n\r\n");  
+                    response.append("Content-Type: "+contentType+"\r\n\r\n");  
             }else {  
                 if (version.startsWith("HTTP ")) {  
                     response.append("HTTP/1.0 404 File Not Found\r\n");  
@@ -56,7 +55,32 @@ public class RequestHandler {
             response.append("<BODY>\r\n");  
             response.append("<H1>HTTP Error 501: Not Implemented</H1>");  
             response.append("</BODY></HTML>\r\n");  */
-        } 
+        }
+		if(method=="HEAD"){
+			if (st.hasMoreTokens()) {  
+                version=st.nextToken();  
+            }  
+            if (version.startsWith("HTTP ")) {  
+            	response.append("HTTP/1.0 200 OK\r\n");  
+                    Date now=new Date();  
+                    response.append("Date: "+now+"\r\n");  
+                    response.append("Server: HTTP 1.0\r\n");  
+//                    response.append("Content-length: "+theData.length+"\r\n");  
+                    response.append("Content-Type: "+contentType+"\r\n\r\n");   
+                 
+            }
+		}
+		if(method=="POST"){
+			if (st.hasMoreTokens()) {  
+                version=st.nextToken();  
+            }  
+            if (version.startsWith("HTTP ")) {  
+            	response.append("HTTP/1.0 200 OK\r\n");  
+                 
+            }
+		}
+
+			
 		try {
 			return response.toString().getBytes("US-ASCII");
 		} catch (UnsupportedEncodingException e) {
